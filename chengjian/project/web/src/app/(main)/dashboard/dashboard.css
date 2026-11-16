@@ -1,0 +1,224 @@
+@font-face{font-family:DashboardGeist;src:url('/fonts/dashboard/geist.woff2') format('woff2');font-display:swap;font-weight:100 900}
+@font-face{font-family:DashboardMono;src:url('/fonts/dashboard/geist-mono.woff2') format('woff2');font-display:swap;font-weight:100 900}
+@font-face{font-family:DashboardPixel;src:url('/fonts/dashboard/pixel-grid.woff2') format('woff2');font-display:swap}
+.chengjian-dashboard{--paper:#f4f3ef;--card:#fbfaf7;--ink:#16181c;--muted:#69706b;--faint:#90958f;--rule:#dedcd5;--rule-soft:#ebe9e3;--green:#1f7a45;--green-1:#e4efe7;--green-2:#bfdfc9;--green-3:#84bf9a;--green-4:#3f9364;--orange:#9a5b00;--output:#c2792a;--red:#a32b1f;--mono:DashboardMono,Consolas,monospace;width:100%;min-width:0;min-height:calc(100vh - 64px);background:var(--paper);color:var(--ink);font:400 12px/1.6 DashboardGeist,'Microsoft YaHei',sans-serif;font-variant-numeric:tabular-nums;color-scheme:light}
+.chengjian-dashboard *{box-sizing:border-box}
+.chengjian-dashboard button,.chengjian-dashboard a{-webkit-tap-highlight-color:transparent}
+.chengjian-dashboard button{cursor:pointer}
+.chengjian-dashboard button:disabled{cursor:default}
+.chengjian-dashboard button:focus-visible,.chengjian-dashboard a:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.chengjian-dashboard svg{flex-shrink:0}
+.chengjian-dashboard .dash-topline{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--rule);padding:12px 24px}
+.chengjian-dashboard .dash-topline>div{display:flex;align-items:center;gap:16px}
+.chengjian-dashboard .dash-top-title{font-size:12px;color:var(--muted);border-left:1px solid var(--rule);padding-left:16px}
+.chengjian-dashboard .dash-label{display:inline-flex;align-items:center;gap:6px;font:500 10px/1.5 var(--mono);letter-spacing:.11em;color:var(--muted)}
+.chengjian-dashboard .dash-digits{font:400 34px/1.15 DashboardPixel,var(--mono);letter-spacing:.01em}
+.chengjian-dashboard .dash-toolbar button{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--rule);padding:4px 9px;font-size:11px;transition:background .15s}
+.chengjian-dashboard .dash-toolbar button:hover{background:var(--green-1)}
+.chengjian-dashboard .dash-toolbar button:disabled{opacity:.5}
+.chengjian-dashboard .dash-live{display:inline-flex;align-items:center;gap:6px;font:10px var(--mono);letter-spacing:.07em;color:var(--green)}
+.chengjian-dashboard .dash-live i{width:5px;height:5px;background:currentColor;animation:dashboard-beat 3s ease-in-out infinite}
+.chengjian-dashboard .dash-live.is-stale{color:var(--orange)}
+.chengjian-dashboard .dash-live.is-stale i{animation:none}
+.chengjian-dashboard .dash-wrap{padding:24px 24px 32px}
+.chengjian-dashboard .dash-host{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:0 0 20px;border-bottom:1px solid var(--rule)}
+.chengjian-dashboard .dash-host h1{font:400 clamp(24px,2.3vw,38px)/1.2 DashboardPixel,var(--mono);margin:8px 0 9px;overflow-wrap:anywhere;letter-spacing:.015em}
+.chengjian-dashboard .dash-host p{color:var(--muted);font:10px/1.7 var(--mono);max-width:650px;margin:0}
+.chengjian-dashboard .dash-host-stats{display:flex;gap:26px;flex-shrink:0}
+.chengjian-dashboard .dash-host-stats>div{text-align:right}
+.chengjian-dashboard .dash-host-stats strong{display:block;margin-top:5px;font:500 11px/1.5 var(--mono);white-space:nowrap}
+.chengjian-dashboard .dash-telemetry{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--rule);margin-top:18px;background:var(--card)}
+.chengjian-dashboard .dash-tel{padding:14px 14px 10px;border-right:1px solid var(--rule);min-width:0}
+.chengjian-dashboard .dash-tel:last-child{border:0}
+.chengjian-dashboard .dash-tel header{display:flex;align-items:baseline;gap:6px;margin-bottom:9px}
+.chengjian-dashboard .dash-tel header .dash-label{margin-right:auto}
+.chengjian-dashboard .dash-tel header>span:last-child{color:var(--muted);font:10px var(--mono)}
+.chengjian-dashboard .dash-tel .dash-digits{font-size:28px}
+.chengjian-dashboard .dash-spark{display:flex;align-items:flex-end;gap:2px;height:44px;margin-bottom:7px;overflow:hidden}
+.chengjian-dashboard .dash-spark>span{display:flex;align-items:flex-end;flex:1;min-width:1px;height:100%;border-bottom:1px solid var(--rule)}
+.chengjian-dashboard .dash-spark>span.unmeasured{border-bottom-style:dotted}
+.chengjian-dashboard .dash-spark i{display:block;background:var(--green);width:100%;transition:height .45s ease-out}
+.chengjian-dashboard .dash-tel footer{display:flex;justify-content:space-between;gap:8px;border-top:1px dotted var(--rule);padding-top:7px;font:9px/1.4 var(--mono);color:var(--muted)}
+.chengjian-dashboard .dash-tel footer span{display:inline-flex;align-items:center;gap:3px}
+.chengjian-dashboard .dash-disks header{margin-bottom:15px}
+.chengjian-dashboard .dash-disk{display:grid;grid-template-columns:minmax(25px,auto) 1fr 44px;align-items:center;gap:8px;font:10px/1.5 var(--mono);margin:9px 0}
+.chengjian-dashboard .dash-disk>span:first-child{max-width:90px;overflow-wrap:anywhere}
+.chengjian-dashboard .dash-disk>span:last-child{text-align:right}
+.chengjian-dashboard .dash-track{height:5px;background:var(--rule-soft);min-width:0;overflow:hidden}
+.chengjian-dashboard .dash-track i{display:block;height:100%;background:var(--green);transition:width .65s ease}
+.chengjian-dashboard .dash-track.high i{background:var(--orange)}
+.chengjian-dashboard .dash-track.critical i{background:var(--red)}
+.chengjian-dashboard .dash-cores-header{display:flex;justify-content:space-between;align-items:center;margin:13px 0 6px;gap:10px}
+.chengjian-dashboard .dash-source{font:9px/1.4 var(--mono);color:var(--muted);white-space:nowrap}
+.chengjian-dashboard .dash-source.is-stale{color:var(--orange);white-space:normal}
+.chengjian-dashboard .dash-cores{display:grid;grid-template-columns:repeat(auto-fit,minmax(46px,1fr));gap:3px;min-height:27px}
+.chengjian-dashboard .dash-cores>span{display:flex;align-items:baseline;justify-content:center;gap:4px;padding:6px 3px;font:11px var(--mono);transition:background-color .6s ease,color .6s ease}
+.chengjian-dashboard .dash-cores small{font-size:8px;opacity:.6}
+.chengjian-dashboard [data-level="0"]{background:var(--rule-soft)}
+.chengjian-dashboard [data-level="1"]{background:var(--green-1);color:var(--green)}
+.chengjian-dashboard [data-level="2"]{background:var(--green-2);color:#1a5a37}
+.chengjian-dashboard [data-level="3"]{background:var(--green-3);color:#143c26}
+.chengjian-dashboard [data-level="4"]{background:var(--green-4);color:white}
+.chengjian-dashboard [data-level="5"]{background:var(--green);color:white}
+.chengjian-dashboard .dash-overview-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:26px 0 22px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.chengjian-dashboard .dash-overview-strip>a{padding:17px 18px;border-right:1px solid var(--rule);transition:background .18s ease;min-width:0}
+.chengjian-dashboard .dash-overview-strip>a:first-child{padding-left:0}
+.chengjian-dashboard .dash-overview-strip>a:last-child{border:0}
+.chengjian-dashboard .dash-overview-strip>a:hover{background:var(--green-1)}
+.chengjian-dashboard .dash-overview-strip .dash-label{display:flex;gap:7px}
+.chengjian-dashboard .dash-overview-strip .dash-label svg:last-child{margin-left:auto}
+.chengjian-dashboard .dash-overview-strip strong{display:block;margin-top:10px}
+.chengjian-dashboard .dash-overview-strip small{display:block;font-size:10px;color:var(--muted);margin-top:6px}
+.chengjian-dashboard .dash-panel{background:var(--card);border:1px solid var(--rule);padding:18px;min-width:0}
+.chengjian-dashboard .dash-section-title{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:19px}
+.chengjian-dashboard .dash-section-title h2{font-size:13px;font-weight:550;display:flex;align-items:baseline;flex-wrap:wrap;gap:10px;margin:0}
+.chengjian-dashboard .dash-section-title h2 .dash-label{font-size:9px}
+.chengjian-dashboard .dash-section-title>div{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.chengjian-dashboard .dash-range{display:flex;border:1px solid var(--rule)}
+.chengjian-dashboard .dash-range button{font:10px var(--mono);padding:5px 10px;min-height:28px;border-right:1px solid var(--rule);background:transparent;transition:background .15s}
+.chengjian-dashboard .dash-range button:last-child{border:0}
+.chengjian-dashboard .dash-range button[aria-pressed=true]{background:var(--ink);color:var(--card)}
+.chengjian-dashboard .dash-range button:hover:not([aria-pressed=true]){background:var(--green-1)}
+.chengjian-dashboard .dash-usage-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin:4px 0 17px}
+.chengjian-dashboard .dash-usage-top>div>span{font-size:10px;color:var(--muted);margin-left:8px}
+.chengjian-dashboard .dash-usage-top .dash-digits{font-size:44px}
+.chengjian-dashboard .dash-usage-top small{display:block;font:9px var(--mono);color:var(--muted);margin-top:6px}
+.chengjian-dashboard .dash-usage-top dl{display:flex;gap:32px;margin:0;text-align:right}
+.chengjian-dashboard .dash-usage-top dt{font-size:9px;color:var(--muted)}
+.chengjian-dashboard .dash-usage-top dd{font:500 16px/1.6 var(--mono);margin:3px 0 0}
+.chengjian-dashboard .dash-composition{display:flex;height:12px;background:var(--rule-soft);overflow:hidden}
+.chengjian-dashboard .dash-composition i{height:100%;transition:width .7s ease}
+.chengjian-dashboard .cache{background:var(--green-2)}
+.chengjian-dashboard .input{background:var(--green)}
+.chengjian-dashboard .output{background:var(--output)}
+.chengjian-dashboard .dash-legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:9px;font:9px/1.4 var(--mono);color:var(--muted)}
+.chengjian-dashboard .dash-legend>span{display:flex;align-items:center;gap:6px}
+.chengjian-dashboard .dash-legend i{display:inline-block;width:7px;height:7px}
+.chengjian-dashboard .dash-legend b{font-weight:500;color:var(--ink)}
+.chengjian-dashboard .dash-legend small{font-size:9px;color:var(--faint)}
+.chengjian-dashboard .dash-usage-charts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.8fr);gap:25px;border-top:1px dotted var(--rule);margin-top:20px;padding-top:15px}
+.chengjian-dashboard .dash-chart-caption{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--muted);font-size:10px;margin-bottom:14px}
+.chengjian-dashboard .dash-chart-caption .dash-label{font-size:8px;letter-spacing:.05em}
+.chengjian-dashboard .dash-daily-bars{height:181px;display:flex;align-items:flex-end;gap:4px;border-bottom:1px solid var(--rule);padding-top:6px}
+.chengjian-dashboard .dash-daily-bars>button{height:100%;flex:1;min-width:0;display:flex;align-items:flex-end;background:var(--rule-soft);padding:0 2px;transition:background .15s}
+.chengjian-dashboard .dash-daily-bars>button:hover,.chengjian-dashboard .dash-daily-bars>button[aria-pressed=true]{background:var(--green-2)}
+.chengjian-dashboard .dash-day-stack{display:flex;flex-direction:column;width:100%;min-height:1px;transition:height .6s ease}
+.chengjian-dashboard .dash-chart-axis{display:flex;justify-content:space-between;color:var(--faint);font:9px/1.5 var(--mono);margin-top:5px}
+.chengjian-dashboard .dash-chart-readout{font:9px/1.7 var(--mono);color:var(--muted);min-height:30px;margin:10px 0 0;overflow-wrap:anywhere}
+.chengjian-dashboard .dash-hour-scroll{overflow-x:auto;padding:2px;scrollbar-width:thin}
+.chengjian-dashboard .dash-hour-grid{display:grid;grid-template-columns:34px repeat(24,minmax(6px,1fr));gap:3px;min-width:340px}
+.chengjian-dashboard .dash-hour-row{display:contents}
+.chengjian-dashboard .dash-hour-label{color:var(--faint);font:8px var(--mono);text-align:center;height:10px}
+.chengjian-dashboard .dash-hour-date{font:9px var(--mono);color:var(--muted);display:flex;align-items:center}
+.chengjian-dashboard .dash-hour-cell{height:21px;background:var(--rule-soft);padding:2px;display:flex;align-items:flex-end;gap:1px;min-width:0;transition:background .15s}
+.chengjian-dashboard .dash-hour-cell i{width:50%;display:block;transition:height .6s ease}
+.chengjian-dashboard .dash-hour-cell:disabled{opacity:.35}
+.chengjian-dashboard .dash-hour-cell:hover:not(:disabled),.chengjian-dashboard .dash-hour-cell[aria-pressed=true]{outline:1px solid var(--ink);outline-offset:0}
+.chengjian-dashboard .dash-model-header{display:flex;justify-content:space-between;gap:12px;border-top:1px dotted var(--rule);margin:7px 0 13px;padding-top:14px}
+.chengjian-dashboard .dash-model-header>span:last-child{font-size:9px;color:var(--muted)}
+.chengjian-dashboard .dash-table-scroll{overflow-x:auto;scrollbar-width:thin;max-width:100%}
+.chengjian-dashboard .dash-table{width:100%;border-collapse:collapse;font:10px/1.6 var(--mono)}
+.chengjian-dashboard .dash-table th{font-size:8px;color:var(--muted);font-weight:500;letter-spacing:.06em;border-bottom:1px solid var(--rule);padding:0 10px 8px;text-align:right;white-space:nowrap}
+.chengjian-dashboard .dash-table th:first-child,.chengjian-dashboard .dash-table td:first-child{text-align:left;padding-left:0}
+.chengjian-dashboard .dash-table th:last-child,.chengjian-dashboard .dash-table td:last-child{padding-right:0}
+.chengjian-dashboard .dash-table td{padding:8px 10px;border-bottom:1px dotted var(--rule-soft);text-align:right}
+.chengjian-dashboard .dash-table tr:last-child td{border-bottom:0}
+.chengjian-dashboard .dash-table tbody tr{transition:background .15s}
+.chengjian-dashboard .dash-table tbody tr:hover{background:var(--green-1)}
+.chengjian-dashboard .dash-table a{display:inline-flex;align-items:center;gap:4px;color:var(--green)}
+.chengjian-dashboard .dash-table a:hover{text-decoration:underline}
+.chengjian-dashboard .dash-models{min-width:540px}
+.chengjian-dashboard .dash-models td:first-child{max-width:300px;overflow-wrap:anywhere}
+.chengjian-dashboard .dash-model-hit{display:inline-block;width:50px;height:4px;background:var(--rule-soft);margin-right:8px;vertical-align:middle}
+.chengjian-dashboard .dash-model-hit i{display:block;background:var(--green-3);height:100%;transition:width .6s}
+.chengjian-dashboard .dash-risk-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px;align-items:stretch}
+.chengjian-dashboard .dash-risk-row>.dash-panel{animation-delay:.06s}.chengjian-dashboard .dash-findings{grid-column:span 2}
+.chengjian-dashboard .dash-severity-track{display:flex;height:9px;background:var(--rule-soft);margin-top:3px;overflow:hidden}
+.chengjian-dashboard .dash-severity-track i{height:100%;transition:width .6s}
+.chengjian-dashboard .dash-severity-track .critical,.chengjian-dashboard .dash-severity-legend .critical i{background:var(--red)}
+.chengjian-dashboard .dash-severity-track .high,.chengjian-dashboard .dash-severity-legend .high i{background:var(--orange)}
+.chengjian-dashboard .dash-severity-track .medium,.chengjian-dashboard .dash-severity-legend .medium i{background:#69706b}
+.chengjian-dashboard .dash-severity-track .low,.chengjian-dashboard .dash-severity-legend .low i{background:#b3b8b1}
+.chengjian-dashboard .dash-severity-legend{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 18px;font:9px var(--mono)}
+.chengjian-dashboard .dash-severity-legend>span{display:inline-flex;gap:6px;align-items:center}
+.chengjian-dashboard .dash-severity-legend i{width:6px;height:6px}
+.chengjian-dashboard .critical{color:var(--red)}
+.chengjian-dashboard .high{color:var(--orange)}
+.chengjian-dashboard .medium{color:var(--muted)}
+.chengjian-dashboard .low{color:var(--faint)}
+.chengjian-dashboard .dash-findings-table{min-width:390px}
+.chengjian-dashboard .dash-findings-table td:nth-child(2),.chengjian-dashboard .dash-findings-table th:nth-child(2){text-align:left;font-family:DashboardGeist,sans-serif;overflow-wrap:anywhere;max-width:330px}
+.chengjian-dashboard .dash-text-link{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--muted)}
+.chengjian-dashboard .dash-text-link:hover{color:var(--green)}
+.chengjian-dashboard .dash-calendar-total{display:flex;align-items:baseline;gap:10px;margin:8px 0 22px}
+.chengjian-dashboard .dash-calendar-total>span:first-child{font:30px DashboardPixel,var(--mono)}
+.chengjian-dashboard .dash-calendar-total>span:last-child{color:var(--muted);font-size:10px}
+.chengjian-dashboard .dash-calendar-scroll{overflow-x:auto;padding:2px;scrollbar-width:thin}
+.chengjian-dashboard .dash-calendar{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;gap:2px;min-width:320px}
+.chengjian-dashboard .dash-calendar>button,.chengjian-dashboard .dash-calendar-pad{aspect-ratio:1;padding:0;min-height:4px;transition:background .3s}
+.chengjian-dashboard .dash-calendar>button:hover,.chengjian-dashboard .dash-calendar>button[aria-pressed=true]{outline:1px solid var(--ink);outline-offset:1px}
+.chengjian-dashboard .dash-calendar-legend{display:flex;justify-content:flex-end;align-items:center;gap:3px;margin:14px 0 0;color:var(--muted);font-size:9px}
+.chengjian-dashboard .dash-calendar-legend i{width:8px;height:8px}
+.chengjian-dashboard .dash-calendar-panel>.dash-text-link{margin-top:12px}
+.chengjian-dashboard .dash-note{color:var(--muted);font-size:10px;line-height:1.8;margin:12px 0 0}
+.chengjian-dashboard .dash-bottom-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px;align-items:stretch}
+.chengjian-dashboard .dash-bottom-row>.dash-panel{animation-delay:.12s}
+.chengjian-dashboard .dash-assets,.chengjian-dashboard .dash-tasks{list-style:none;padding:0;margin:0}
+.chengjian-dashboard .dash-assets li{display:grid;grid-template-columns:50px 1fr 38px;gap:10px;align-items:center;margin:16px 0;font:10px var(--mono)}
+.chengjian-dashboard .dash-assets li>span{color:var(--muted)}
+.chengjian-dashboard .dash-assets b{text-align:right;font-weight:500}
+.chengjian-dashboard .dash-tasks li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dotted var(--rule-soft)}
+.chengjian-dashboard .dash-tasks li:first-child{padding-top:0}
+.chengjian-dashboard .dash-tasks li:last-child{border:0}
+.chengjian-dashboard .dash-tasks a{min-width:0;flex:1;display:block}
+.chengjian-dashboard .dash-tasks b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;font-weight:500}
+.chengjian-dashboard .dash-tasks a:hover b{color:var(--green)}
+.chengjian-dashboard .dash-tasks small{display:block;font:9px var(--mono);color:var(--faint);margin-top:5px}
+.chengjian-dashboard .dash-pill{font-size:9px;color:var(--muted);border:1px solid var(--rule);padding:1px 5px;white-space:nowrap}
+.chengjian-dashboard .dash-pill.is-active{color:var(--green);background:var(--green-1);border-color:var(--green-2)}
+.chengjian-dashboard .dash-tasks+.dash-text-link{margin-top:12px}
+.chengjian-dashboard .dash-processes td{padding-top:6px;padding-bottom:6px}
+.chengjian-dashboard .dash-processes td:first-child{max-width:180px;overflow-wrap:anywhere}
+.chengjian-dashboard .dash-empty{padding:18px 0;color:var(--muted);font-size:11px;margin:0}
+.chengjian-dashboard .dash-footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);margin-top:24px;padding-top:12px;font:9px/1.8 var(--mono);color:var(--muted)}
+@keyframes dashboard-enter{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dashboard-beat{0%,100%{opacity:1}50%{opacity:.35}}
+@media(min-width:1900px){.chengjian-dashboard .dash-wrap{padding:28px 32px 36px}.chengjian-dashboard .dash-hour-cell{height:25px}.chengjian-dashboard .dash-daily-bars{height:209px}.chengjian-dashboard .dash-risk-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1250px){.chengjian-dashboard .dash-host{align-items:flex-start}.chengjian-dashboard .dash-host-stats{gap:14px}.chengjian-dashboard .dash-host-stats>div:first-child{display:none}.chengjian-dashboard .dash-tel{padding:12px 10px 8px}.chengjian-dashboard .dash-tel .dash-digits{font-size:24px}.chengjian-dashboard .dash-bottom-row{grid-template-columns:repeat(2,minmax(0,1fr))}.chengjian-dashboard .dash-bottom-row>section:last-child{grid-column:1/-1}.chengjian-dashboard .dash-processes td:first-child{max-width:none}.chengjian-dashboard .dash-usage-top dl{gap:20px}.chengjian-dashboard .dash-risk-row{grid-template-columns:1fr}.chengjian-dashboard .dash-findings{grid-column:auto}.chengjian-dashboard .dash-calendar{min-width:320px;max-width:100%}.chengjian-dashboard .dash-calendar>button{max-height:15px}.chengjian-dashboard .dash-calendar-panel{display:grid;grid-template-columns:1fr 2fr;column-gap:30px}.chengjian-dashboard .dash-calendar-panel .dash-section-title{grid-column:1/-1}.chengjian-dashboard .dash-calendar-scroll{grid-column:2;grid-row:2/6}.chengjian-dashboard .dash-calendar-panel .dash-chart-axis{grid-column:2}.chengjian-dashboard .dash-calendar-legend{grid-column:2}.chengjian-dashboard .dash-calendar-panel>.dash-chart-readout{grid-column:2}.chengjian-dashboard .dash-calendar-total{margin:0}.chengjian-dashboard .dash-calendar-panel>.dash-note{grid-column:1;grid-row:3}.chengjian-dashboard .dash-calendar-panel>.dash-text-link{grid-column:1;grid-row:4}.chengjian-dashboard .dash-usage-charts{grid-template-columns:1fr 1.5fr;gap:16px}}
+@media(max-width:1000px){.chengjian-dashboard .dash-host{flex-direction:column;gap:15px}.chengjian-dashboard .dash-host-stats{width:100%;justify-content:space-between}.chengjian-dashboard .dash-host-stats>div{text-align:left}.chengjian-dashboard .dash-host-stats>div:first-child{display:block}.chengjian-dashboard .dash-telemetry{grid-template-columns:repeat(2,minmax(0,1fr))}.chengjian-dashboard .dash-tel:nth-child(2){border-right:0}.chengjian-dashboard .dash-tel:nth-child(3),.chengjian-dashboard .dash-tel:nth-child(4){border-top:1px solid var(--rule)}.chengjian-dashboard .dash-usage-charts{grid-template-columns:1fr}.chengjian-dashboard .dash-daily-bars{height:100px}.chengjian-dashboard .dash-hour-cell{height:24px}}
+@media(max-width:700px){.chengjian-dashboard .dash-wrap{padding:18px 14px 26px}.chengjian-dashboard .dash-topline{padding:11px 14px}.chengjian-dashboard .dash-topline .dash-label{font-size:8px}.chengjian-dashboard .dash-top-title{display:none}.chengjian-dashboard .dash-host-stats{gap:10px;flex-wrap:wrap}.chengjian-dashboard .dash-host-stats .dash-label{font-size:8px}.chengjian-dashboard .dash-host-stats strong{font-size:10px}.chengjian-dashboard .dash-overview-strip{grid-template-columns:repeat(2,minmax(0,1fr));margin:18px 0}.chengjian-dashboard .dash-overview-strip>a{padding:12px!important}.chengjian-dashboard .dash-overview-strip>a:nth-child(2){border-right:0}.chengjian-dashboard .dash-overview-strip>a:nth-child(-n+2){border-bottom:1px solid var(--rule)}.chengjian-dashboard .dash-panel{padding:14px}.chengjian-dashboard .dash-section-title{align-items:flex-start;flex-wrap:wrap;gap:8px}.chengjian-dashboard .dash-section-title>div{gap:8px}.chengjian-dashboard .dash-usage-top{align-items:flex-start;flex-direction:column;gap:16px}.chengjian-dashboard .dash-usage-top dl{width:100%;justify-content:space-between;text-align:left;gap:8px}.chengjian-dashboard .dash-usage-top dd{font-size:14px}.chengjian-dashboard .dash-bottom-row{grid-template-columns:1fr}.chengjian-dashboard .dash-bottom-row>section:last-child{grid-column:auto}.chengjian-dashboard .dash-calendar-panel{display:block}.chengjian-dashboard .dash-calendar-total{margin:10px 0 18px}.chengjian-dashboard .dash-calendar-scroll{margin-top:10px}.chengjian-dashboard .dash-model-header{flex-direction:column;gap:5px}.chengjian-dashboard .dash-legend{gap:10px}.chengjian-dashboard .dash-digits{font-size:30px}.chengjian-dashboard .dash-chart-readout{min-height:32px}}
+@media(prefers-reduced-motion:reduce){.chengjian-dashboard *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.chengjian-dashboard .dash-report-links{max-width:220px;text-align:left;font-size:9px}
+.chengjian-dashboard .dash-report-links summary{cursor:pointer;color:var(--green);white-space:nowrap;list-style:revert}
+.chengjian-dashboard .dash-report-links ul{list-style:none;margin:10px 0 4px;padding:0;min-width:150px}
+.chengjian-dashboard .dash-report-links li{margin:8px 0;line-height:1.8;overflow-wrap:anywhere}
+.chengjian-dashboard .dash-report-links a{font-family:DashboardGeist,sans-serif;font-size:10px;align-items:flex-start}
+.chengjian-dashboard{container:dashboard / inline-size}
+.chengjian-dashboard .dash-day-stack,.chengjian-dashboard .dash-hour-cell i{transform-origin:bottom;animation:dashboard-grow .55s ease-out both}
+.chengjian-dashboard .dash-composition i{transform-origin:left;animation:dashboard-grow-x .55s ease-out both}
+@keyframes dashboard-grow{from{transform:scaleY(.01)}to{transform:scaleY(1)}}
+@keyframes dashboard-grow-x{from{transform:scaleX(.01)}to{transform:scaleX(1)}}
+@container dashboard (max-width:700px){
+ .chengjian-dashboard .dash-overview-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .chengjian-dashboard .dash-overview-strip>a{padding:12px!important}
+ .chengjian-dashboard .dash-overview-strip>a:nth-child(2){border-right:0}
+ .chengjian-dashboard .dash-overview-strip>a:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+ .chengjian-dashboard .dash-usage-top{align-items:flex-start;flex-direction:column;gap:16px}
+ .chengjian-dashboard .dash-usage-top dl{width:100%;justify-content:space-between;text-align:left;gap:8px}
+ .chengjian-dashboard .dash-usage-top dd{font-size:14px}
+ .chengjian-dashboard .dash-calendar-panel{display:block}
+ .chengjian-dashboard .dash-calendar-total{margin:10px 0 18px}
+ .chengjian-dashboard .dash-calendar-scroll{margin-top:10px}
+ .chengjian-dashboard .dash-bottom-row{grid-template-columns:1fr}
+ .chengjian-dashboard .dash-bottom-row>section:last-child{grid-column:auto}
+}
+
+.chengjian-dashboard .dash-findings-table th:last-child{text-align:left}
+
+/* Bound both expanded groups and the complete table as report counts grow. */
+.chengjian-dashboard .dash-findings>.dash-table-scroll{max-height:min(440px,60vh);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.chengjian-dashboard .dash-findings-table th{position:sticky;top:0;z-index:1;background:var(--card)}
+.chengjian-dashboard .dash-findings-table td{vertical-align:top}
+.chengjian-dashboard .dash-report-links ul{max-height:min(224px,35vh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-gutter:stable;padding-right:8px}
+.chengjian-dashboard .dash-report-links ul:focus-visible,.chengjian-dashboard .dash-findings>.dash-table-scroll:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
+

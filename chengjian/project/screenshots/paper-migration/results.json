@@ -1,0 +1,253 @@
+{
+  "version": "ymh-paper-20261021",
+  "project": "E:/cyberagent/artex-ymh-main/artex-ymh-main",
+  "results": [
+    {
+      "route": "/dashboard/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "LAPTOP-4D6A3PFU",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/chat/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/function/tasks/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "任务",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/function/findings/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "发现",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/function/traffic/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "流量",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/function/commands/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "工具执行",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/function/llm-records/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "LLM 录制",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/function/assets/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "资产",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/function/sync/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "资产同步",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/function/workspace/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/intranet/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "内网作战",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/llm/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "LLM",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/agents/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "Agent",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/mcp/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "MCP",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/skills/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "Skill",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/tools/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "工具",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/notify/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "通知推送",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/intercept/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "命令拦截",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/intercept/assets/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "资产拦截",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/intercept/approvals/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "审批记录",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/logs/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "系统日志",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/system/settings/",
+      "theme": "paper",
+      "background": "rgb(244, 243, 239)",
+      "title": "系统配置",
+      "main": true,
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "route": "/function/findings/detail/?id=999999",
+      "fixture": true
+    },
+    {
+      "route": "/dashboard/",
+      "width": 820,
+      "window": 820,
+      "document": 820
+    },
+    {
+      "route": "/intranet/",
+      "width": 820,
+      "window": 820,
+      "document": 820
+    },
+    {
+      "route": "/system/settings/",
+      "width": 820,
+      "window": 820,
+      "document": 820
+    },
+    {
+      "route": "/dashboard/",
+      "width": 390,
+      "window": 390,
+      "document": 390
+    },
+    {
+      "route": "/intranet/",
+      "width": 390,
+      "window": 390,
+      "document": 390
+    },
+    {
+      "route": "/system/settings/",
+      "width": 390,
+      "window": 390,
+      "document": 390
+    },
+    {
+      "theme": "dark"
+    },
+    {
+      "route": "/setup/",
+      "initialized": false
+    }
+  ],
+  "pageErrors": [],
+  "httpErrors": [],
+  "blockedMutations": [],
+  "mode": "real YMH backend + fresh artex_ymh database; report fixture only; no task/action execution"
+}

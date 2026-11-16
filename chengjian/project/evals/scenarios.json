@@ -1,0 +1,302 @@
+{
+  "version": 3,
+  "environment": "local fixtures and isolated PostgreSQL; no LLM or external targets",
+  "notes": [
+    "status 三态：automated=有测试且能跑；partial=只覆盖了核心不变量，端到端仍缺；manual=需要人工或真实目标。",
+    "本文件只登记「能跑起来的证据」。没有测试支撑的场景不写 automated——那会让『有 eval』变成自我安慰。",
+    "26 = Web 12（W01–W12）+ 内网/路由 8（I01–I08）+ 故障恢复 6（F01–F06），对应方向文件 §7 E1 的首批样本规模。",
+    "W11 / W12 / F06 仍是 manual：它们要的是真实站点、真实浏览器交互或真实进程重启，用单测代替只会得到假绿灯。",
+    "每个 automated 场景必须能在 evals/run.ps1 下一次跑通；新增测试时同步登记，不登记等于没有。"
+  ],
+  "scenarios": [
+    {
+      "id": "W01",
+      "name": "多身份请求对照：单点变异与错误基线拒绝",
+      "status": "automated",
+      "package": "./webtest",
+      "tests": [
+        "TestReplayMutatesExactlyOneAxis",
+        "TestReplayRejectsAmbiguousOrWrongBaseline"
+      ],
+      "why": "差分实验只有在「一次只改一个轴」时才可解释；基线里没有该参数就报错，避免在错误基线上变异后把结果当成差异。"
+    },
+    {
+      "id": "W02",
+      "name": "差分判定三态：噪声标定 / 服务端错误 / 主体差异",
+      "status": "automated",
+      "package": "./webtest",
+      "tests": [
+        "TestCompareWithNoiseCalibratesAgainstControlJitter",
+        "TestCompareWithNoiseRejectsUnstableControl",
+        "TestCompareTreatsServerErrorAsInconclusive",
+        "TestCompareDetectsSubstantialBodyDifference"
+      ],
+      "why": "先跑两次同一请求测抖动，再比变体；抖动本身超过 5% 时判 inconclusive 而不是「有差异」。5xx 是前提失效，不是结论。"
+    },
+    {
+      "id": "W03",
+      "name": "身份版本：替换即失效旧结论",
+      "status": "automated",
+      "package": "./authstate",
+      "tests": [
+        "TestPutAssignsVersionAndBumpsOnReplace",
+        "TestBumpInvalidatesEarlierConclusions",
+        "TestStaleForUnknownOrEmptyRef",
+        "TestHeaderPairsMergesCookiesDeterministically"
+      ],
+      "why": "身份被替换后版本递增，基于旧会话得出的结论自动标记过期；Cookie 名排序固定，避免顺序变化污染服务端指纹。"
+    },
+    {
+      "id": "W04",
+      "name": "覆盖单元五轴 + 来源强制 + found 只升不降",
+      "status": "automated",
+      "package": "./webtest",
+      "tests": [
+        "TestFrontierRequiresSourceAndReason",
+        "TestFrontierCoverageSeparatesAxes",
+        "TestFrontierFoundIsSticky",
+        "TestFrontierFamilyStatsExposeImbalance"
+      ],
+      "why": "覆盖单元按 method×route×参数schema×身份×测试族 分轴记录，不塞进单一互斥状态；无来源的覆盖记录拒绝写入。"
+    },
+    {
+      "id": "W05",
+      "name": "请求模板归一：占位名折叠与参数顺序无关",
+      "status": "automated",
+      "package": "./webtest",
+      "tests": [
+        "TestTemplateKeyCollapsesPlaceholderNames",
+        "TestParamSchemaIsOrderInsensitive"
+      ],
+      "why": "`/api/user/{id}` 与 `/api/user/{uid}` 是同一个单元，参数顺序不同也不是两个单元——否则覆盖率会被写法差异虚高。"
+    },
+    {
+      "id": "W06",
+      "name": "语义层候选过滤：编造 method / 跨域 / 静态资源一律丢",
+      "status": "automated",
+      "package": "./server",
+      "tests": [
+        "TestParseSemanticCandidatesRejectsInventedMethod",
+        "TestParseSemanticCandidatesRejectsCrossOriginAndAssets",
+        "TestParseSemanticCandidatesIsDeterministic",
+        "TestParseSemanticCandidatesToleratesFenceAndWrapper"
+      ],
+      "why": "T-21 的评测基线：模型输出不可复现，但「这段文字能变成哪些候选」可复现。编造端点比漏掉端点贵得多。"
+    },
+    {
+      "id": "W07",
+      "name": "资产补全端点增量与录制开关（本机站点）",
+      "status": "automated",
+      "package": "./server",
+      "tests": [
+        "TestLocalEnrichmentThroughTaskProxy"
+      ],
+      "why": "补全抓的是同一批目标，必须与 worker 共用出口与 UA；录制开/关都不改变路由语义，端点增量一致。"
+    },
+    {
+      "id": "W08",
+      "name": "流量证据跨任务隔离",
+      "status": "automated",
+      "package": "./server",
+      "tests": [
+        "TestTrafficScopeOwnership",
+        "TestScopedEvidenceRecordAndBindUseFindingTask"
+      ],
+      "why": "证据归属必须跟着 finding 的任务走，不能跟着「当前是谁在查」走。"
+    },
+    {
+      "id": "W09",
+      "name": "意图判据 unknown ≠ unmet",
+      "status": "automated",
+      "package": "./planning",
+      "tests": [
+        "TestEvaluateUnknownIsNotUnmet",
+        "TestEvaluateConfirmedZeroIsUnmet",
+        "TestSummarizeSeparatesBlockingFromUnknown",
+        "TestEvaluateDoneCommandRequiresManualNote"
+      ],
+      "why": "缺数据必须报 unknown；只有确认是 0 才算 unmet。把 unknown 压成 unmet 会让 agent 去修一个没坏的东西。"
+    },
+    {
+      "id": "W10",
+      "name": "实例依赖隔离：判据统计绑定各自任务",
+      "status": "automated",
+      "package": "./server",
+      "tests": [
+        "TestPlanningCountsAreBoundToTheirOwnTask",
+        "TestPlanningCountsDegradeToAllUnknown"
+      ],
+      "why": "同一进程两个任务的判据统计必须各读各的；读失败整份降级为 unknown，不给半真数据。"
+    },
+    {
+      "id": "W11",
+      "name": "静态收割覆盖报告（避免把『没覆盖』读成『没有』）",
+      "status": "manual",
+      "how": "python skills/api-recon/scripts/harvest_static.py <BASE_URL> <OUTDIR> --coverage；真实站点补全基线：$env:CHENGJIAN_REAL_SITE='https://<站点>' 后 ./scripts/pgtest.ps1 -Packages ./server -Run TestRealSiteEnrichment",
+      "gap": "harvest_static 产出 coverage.json（chunk 抓取成败、method 未知端点、仅 sourcemap 出现的端点、未覆盖面清单）。真实站点基线已跑通一次（2026-10-24 zhihu.com/signin：sites_without_endpoints 1→0、endpoint 0→1、方法 GET），但增量偏小——公开静态面能读到的就这么多。该用例按环境变量跳过，故不进 automated 清单：会跳过的测试写成 automated 等于把「没跑」记成「通过」。"
+    },
+    {
+      "id": "W12",
+      "name": "动态交互面：Tab / 弹窗 / 分页后的请求面",
+      "status": "manual",
+      "how": "真实 SPA 站点上人工点击各交互面，对照 coverage.json 判断漏了多少动态请求",
+      "gap": "仍是单进程串行 goto，未自动点 Tab/弹窗/分页。属于 T-20 的剩余部分：做成原地升级而不是新工具。"
+    },
+    {
+      "id": "I01",
+      "name": "分支网段各自独立选路（双段同时推进）",
+      "status": "automated",
+      "package": "./tunnel",
+      "tests": [
+        "TestRouteTwoSegmentsGetPinnedIndependently",
+        "TestRoutePrefersLowerHopDepth"
+      ],
+      "why": "两条分支网段必须各走各的路径；同优先级时按 hop 深度取更短的一条，避免绕远。"
+    },
+    {
+      "id": "I02",
+      "name": "单路径切换不破坏另一路径",
+      "status": "automated",
+      "package": "./tunnel",
+      "tests": [
+        "TestRouteFailureNeverExcludesARoute",
+        "TestRouteNoOpinionWhenEmpty"
+      ],
+      "why": "一条路径失败只阻塞依赖它的目标；路由表给不出意见时返回「无意见」而不是「不可达」。"
+    },
+    {
+      "id": "I03",
+      "name": "控制通道无环与 hop 深度上限",
+      "status": "automated",
+      "package": "./tunnel",
+      "tests": [
+        "TestValidateHopDepth",
+        "TestValidateHopDepthMessageIsActionable",
+        "TestPlanSocksRejectsExcessiveHopDepth",
+        "TestPlanSocksPortPoolExhausted"
+      ],
+      "why": "两层控制通道是上限；超限报错要给出可操作的说法，而不是一个数字。端口池耗尽与超限是两种不同的失败。"
+    },
+    {
+      "id": "I04",
+      "name": "回环监听不成为远程可达事实",
+      "status": "automated",
+      "package": "./observation",
+      "tests": [
+        "TestListenerScopeSeparatesLoopbackFromRemote",
+        "TestUnknownListenerScopeDoesNotDefaultToReachable"
+      ],
+      "why": "I3 验收最贵的一条：把 127.0.0.1:3306 当成 10.0.0.5:3306，会派出一条注定失败的横向意图，而失败会被读成「服务关了」。"
+    },
+    {
+      "id": "I05",
+      "name": "协议能力矩阵与 unsupported 语义",
+      "status": "automated",
+      "package": "./capability",
+      "tests": [
+        "TestMatrixDeclaresEveryProtocol",
+        "TestUnimplementedProtocolsSayWhatIsMissing",
+        "TestLookupMethodCoversImpacketFamily",
+        "TestCancelSemanticsDocumented"
+      ],
+      "why": "五个协议全部登记；未实现的要说清缺什么，而不是让 agent 反复试错后把结果记成目标失败。"
+    },
+    {
+      "id": "I06",
+      "name": "退出码三档 real / inferred / none",
+      "status": "automated",
+      "package": "./capability",
+      "tests": [
+        "TestExitStatusIsNotABoolean",
+        "TestMatrixCopyIsIndependent"
+      ],
+      "why": "SSH 拿到远端真实退出码，impacket 只有本地脚本退出码，无执行通道就没有退出码。三者压成一个布尔会制造假结论。"
+    },
+    {
+      "id": "I07",
+      "name": "隧道可达性：refused 也是路通",
+      "status": "automated",
+      "package": "./tunnel",
+      "tests": [
+        "TestRouteRefusedCountsAsReachable",
+        "TestRouteUnknownErrorIsNotEvidence",
+        "TestProbeCmdTCPThreeState",
+        "TestRouteSyncFiltersAndPreservesEvidence"
+      ],
+      "why": "RST 说明包已到达对端，是端口没开而不是路不通；unknown 不能当证据。"
+    },
+    {
+      "id": "I08",
+      "name": "声明与观测分列（一次探测不冲掉整体声明）",
+      "status": "automated",
+      "package": "./db",
+      "tests": [
+        "TestTunnelReachDeclarationIsNotObservation"
+      ],
+      "why": "reachable_ranges 是「我以为」，reach_verified_ranges 是「我试过」。合在一列会让局部探测静默抹掉未探到的声明。"
+    },
+    {
+      "id": "F01",
+      "name": "未授权 Session / Tunnel 操作被拒（fail-closed）",
+      "status": "automated",
+      "package": "./server",
+      "tests": [
+        "TestTunnelRedeployAuthorizationFailsClosedWithoutContextOrStore"
+      ],
+      "why": "拿不到授权上下文时拒绝执行，不能默认放行；授权集合与实际执行检查必须同源（db 侧 TestGrantsForTaskMatchesEnforcement）。"
+    },
+    {
+      "id": "F02",
+      "name": "stop 与健康重拉竞态",
+      "status": "automated",
+      "package": "./tunnel",
+      "tests": [
+        "TestHealthUsesFreshRecordAfterTeardown",
+        "TestTeardownCancelsInflightAndPreventsResurrection",
+        "TestTeardownRequiresDurableStopIntent"
+      ],
+      "why": "用户停止后不能被健康循环重新拉起；先持久化停止意图再清理，重拉要比较版本。"
+    },
+    {
+      "id": "F03",
+      "name": "远端不可达：保留待清理记录，不虚记 clean",
+      "status": "automated",
+      "package": "./tunnel",
+      "tests": [
+        "TestTeardownUnknownRemoteRetainsStopIntentAndCanRetry",
+        "TestRemoteCleanupUnknownIsNotConfirmed"
+      ],
+      "why": "远端不可观测时不能承诺它已消失；待清理记录保留并可重试，比一个假的 clean 更安全。"
+    },
+    {
+      "id": "F04",
+      "name": "timeout / cancel 之后的状态核对",
+      "status": "automated",
+      "package": "./tunnel",
+      "tests": [
+        "TestRollbackSurvivesCallerCancellation",
+        "TestConcurrentTeardownDoesNotCancelCleanupOrRepeatCommands",
+        "TestRollbackFailurePreservesLedger"
+      ],
+      "why": "调用方取消不等于远端进程已停止；收尾必须能继续跑完并把账目留下。"
+    },
+    {
+      "id": "F05",
+      "name": "任务终态按依赖逆序释放，只放本任务租约",
+      "status": "automated",
+      "package": "./server",
+      "tests": [
+        "TestReleaseTaskResourcesEndToEnd",
+        "TestTaskResourceReleaseEmpty"
+      ],
+      "why": "先拆隧道再放会话租约；别的任务持有的租约是它的存活声明，不能被顺手释放。"
+    },
+    {
+      "id": "F06",
+      "name": "进程退出 / 重启后的恢复与对账",
+      "status": "manual",
+      "how": "kill -9 后端进程后重启，核对隧道进程、会话、租约、待清理记录四张台账",
+      "gap": "启动恢复目前只有零散单测（孤儿标 error、残留 running 意图重置）。完整的「重启对账」还没有一个端到端 fixture。"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "task_id": 2,
+      "intent_id": 3,
+      "tool": "write",
+      "state": "unknown",
+      "assessment": "process interrupted"
+    }
+  ]
+}

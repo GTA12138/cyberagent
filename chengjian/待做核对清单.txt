@@ -1,0 +1,19 @@
+开始将这些全部做完。然后输出报告，最终重新编译启动验证。二、半落地——机制在，端到端差一环
+项	卡在哪（实测）
+T-06 自动探测	MarkReachVerified（db/tunnels.go:213）只有定义和测试，生产零调用方。所以 reach_verified_at 永远为 NULL——现在只有「声明」，没有「观测」
+T-07 凭据复用打分	HasSuccess（db/auth_attempts.go:73）零调用方。ScoreReuse（db/credential_score.go:119）已在 server/credentials.go:176 用起来了，但没用「打过成功」这个最强信号
+T-11 意图准入	prerequisites/done_when 只命中 attackchain/chain.go 的报告章节名；planning/ 目录不存在。只有「不许重复派」，没有「派之前要求什么、什么算做完」
+T-14 提示词	强断言改了，拆五块没做——提示词仍在继续变长
+T-12 评测	12 / 26。E08（资源收尾）标 partial，因为需要真实隧道才能跑
+T-10 端到端	逻辑单测过了，真实隧道上的「拆得掉/拆不掉」没有运行记录
+租约覆盖	只在 session_exec / session_recon 记账，tunnel_deploy 不记。单任务自建的隧道按任务直收没问题，但跨任务共用的隧道没有租约保护
+三、完全未做
+项	证据
+T-08 Linux/SSH 横向	go.mod:14 有 golang.org/x/crypto v0.55.0，但全仓没有一处 x/crypto/ssh 导入；lateral_exec.go:42 仍是 impacket 五个（psexec/wmiexec/smbexec/atexec/dcomexec）
+T-13 Observation 结构化	artifact_ref 全仓零命中
+T-15 ToolCapability / BudgetService	ToolCapability、BudgetService 零命中。现有 token 上限只在 planner 周期检查，worker/直投/连续会话没有统一硬准入
+T-16 / T-17 / T-18（W1–W3）	webtest/、authstate/ 目录不存在
+T-21 S3 语义层通电	SetJSAnalyzer 只在 enrich/lifecycle_test.go:33 被调，生产零调用——语义层有接口、有预算、有打分，就是没插电
+T-25 实例依赖接线	工具/提示词仍靠包级可变回调
+T-03 真实站点	只有 enrich_integration_test.go 的本机站点验证
+I2 协议矩阵四项	卡在「需要真实 SMB/WinRM/LDAP/SSH 客户端」，go.mod 一个都没有

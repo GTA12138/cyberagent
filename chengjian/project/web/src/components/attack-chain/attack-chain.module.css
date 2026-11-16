@@ -1,0 +1,122 @@
+.workspace {
+  --report-ink: #17212d;
+  --report-muted: #737b86;
+  --report-line: #e5e3de;
+  --report-surface: #fbfaf7;
+  color: var(--report-ink);
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  background: #f4f3ef;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+/* biome-ignore lint/correctness/noUnknownPseudoClass: CSS Modules global theme. */
+:global(.dark) .workspace {
+  --report-ink: #e1e8ef;
+  --report-muted: #9eacbb;
+  --report-line: #324052;
+  --report-surface: #182332;
+  background: #111b27;
+  border-color: #283547;
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 2px 0 20px;
+}
+.toolbar > div:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+}
+.eyebrow {
+  font:
+    10px / 1.8 var(--font-geist-mono),
+    ui-monospace,
+    monospace;
+  letter-spacing: 1.5px;
+  color: var(--report-muted);
+}
+.reportMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--report-muted);
+}
+.reportMeta > span {
+  color: #b2b8bf;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+}
+.notice {
+  padding: 12px 16px;
+  margin: 0 0 18px;
+  border-left: 2px solid #b88c42;
+  background: #bf943309;
+  color: var(--report-muted);
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.trafficSection {
+  margin: 0;
+  scroll-margin-top: 100px;
+  border: 1px solid var(--report-line);
+  border-radius: 9px;
+  background: var(--report-surface);
+  min-width: 0;
+}
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 200px;
+  padding: 30px;
+  font-size: 14px;
+}
+@media (max-width: 640px) {
+  .workspace {
+    padding: 0;
+    border-radius: 0;
+  }
+  .toolbar {
+    padding: 5px 3px 17px;
+    gap: 12px;
+  }
+  .toolbar > div:first-child {
+    gap: 5px;
+  }
+  .actions {
+    width: 100%;
+  }
+  .reportMeta {
+    font-size: 10px;
+    gap: 7px;
+  }
+  .eyebrow {
+    font-size: 9px;
+  }
+  .notice {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 1150px) {
+  .trafficSection {
+    margin-left: 0;
+  }
+}
